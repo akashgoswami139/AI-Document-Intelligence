@@ -13,7 +13,6 @@ if str(PROJECT_ROOT) not in sys.path:
 
 load_dotenv()
 
-PROJECT_GUIDE_PDF = PROJECT_ROOT / "docs" / "PROJECT_GUIDE.pdf"
 
 from src.chunker import DocumentChunker
 from src.document_analyzer import DocumentAnalyzer
@@ -297,14 +296,6 @@ def process_document(uploaded_file) -> str | None:
 with st.sidebar:
     st.markdown("# AI Document Intelligence")
     st.markdown("*Upload any document. Let AI understand it.*")
-    if PROJECT_GUIDE_PDF.exists():
-        st.download_button(
-            "Download Project Guide",
-            data=PROJECT_GUIDE_PDF.read_bytes(),
-            file_name=PROJECT_GUIDE_PDF.name,
-            mime="application/pdf",
-            use_container_width=True,
-        )
     st.markdown("---")
 
     # File uploader
