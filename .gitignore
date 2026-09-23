@@ -1,0 +1,29 @@
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data
+data/uploads/*
+!data/uploads/.gitkeep
+
+# ChromaDB
+chroma_data/
+
+# OS
+.DS_Store
+Thumbs.db
