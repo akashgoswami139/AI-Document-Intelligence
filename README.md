@@ -9,11 +9,7 @@ Chat with your PDFs, Word files, spreadsheets and notes — and get answers **gr
 <br/>
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://ai-document-intelligence-akash.streamlit.app/)
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C)
-![ChromaDB](https://img.shields.io/badge/Vector%20DB-ChromaDB-FF6F61)
-![Groq](https://img.shields.io/badge/LLM-Groq-F55036)
-![Jina](https://img.shields.io/badge/Embeddings-Jina%20AI-009191)
+
 
 **[🚀 Live Demo](https://ai-document-intelligence-akash.streamlit.app/)** · **[🎬 Screenshots](#-see-it-in-action)** · **[🧠 How it works](#-how-it-works)** · **[⚡ Quick start](#-quick-start)** · **[📁 Structure](#-project-structure)**
 
