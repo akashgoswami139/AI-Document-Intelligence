@@ -370,6 +370,6 @@ with st.container():
                 })
 st.markdown(
     '<div style="text-align:center; color:#6b7280; padding:24px 0 8px;">'
-    'Built by Akash Goswami ❤️</div>',
+    'Built with ❤️ by Akash Goswami</div>',
     unsafe_allow_html=True,
 )
