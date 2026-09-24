@@ -333,7 +333,7 @@ with st.container():
     st.markdown("## Ask Your Documents")
 
     if not st.session_state.documents:
-        st.info("Upload documents using the sidebar to get started.")
+        st.info(" Please upload documents start chat")
     else:
         # Display chat history
         for msg in st.session_state.chat_history:
@@ -341,7 +341,7 @@ with st.container():
                 st.markdown(msg["content"])
 
         # Chat input
-        if prompt := st.chat_input("Ask a question about your documents..."):
+        if prompt := st.chat_input("Ask me anything about your documents..."):
             # Show user message
             st.session_state.chat_history.append({
                 "role": "user",
@@ -352,7 +352,7 @@ with st.container():
 
             # Generate response
             with st.chat_message("assistant"):
-                with st.spinner("Searching documents and generating answer..."):
+                with st.spinner("Please wait few second"):
                     doc_list = list(st.session_state.documents.values())
                     try:
                         response = st.session_state.rag_chain.query(prompt, doc_list)

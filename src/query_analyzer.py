@@ -4,7 +4,7 @@ import json
 import logging
 from src.models import DocumentMetadata, QueryAnalysis
 from src.prompts import QUERY_ANALYSIS_PROMPT
-from src.llm import get_gemini_model
+from src.llm import get_groq_model
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ class QueryAnalyzer:
     """Analyzes user queries to drive smarter retrieval."""
 
     def __init__(self):
-        self.llm = get_gemini_model()
+        self.llm = get_groq_model()
 
     def analyze(
         self,

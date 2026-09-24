@@ -11,7 +11,7 @@ from src.models import (
 )
 from src.prompts import RAG_SYSTEM_PROMPT
 from src.retriever import Retriever
-from src.llm import get_gemini_model
+from src.llm import get_groq_model
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class RAGChain:
 
     def __init__(self, retriever: Retriever):
         self.retriever = retriever
-        self.llm = get_gemini_model()
+        self.llm = get_groq_model()
         self.parser = StrOutputParser()
         self.chat_history: list[dict[str, str]] = []
         self.max_history = 10  # Keep last N exchanges

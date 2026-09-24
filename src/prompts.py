@@ -87,12 +87,16 @@ STRICT RULES:
 3. Do NOT invent facts.
 4. Do NOT use outside knowledge to fill in missing information.
 5. If the question asks about something not present in any document, say so clearly.
-6. Be precise and specific. Quote relevant text when helpful.
+6. Be precise and specific.
 7. For numerical data, provide exact figures from the documents.
+8. Do NOT include source names, file names, page numbers, sections, document types, citations, or source references in the final answer.
+9. Return only the natural-language answer to the user's question.
 
 FORMAT YOUR ANSWER:
 - Start with a clear, direct answer
-- Support with evidence from the documents
+- Explain the answer using information from the retrieved documents
+- Do not mention where the information came from.
+
 RETRIEVED DOCUMENT CONTEXT:
 {context}
 

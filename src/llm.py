@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-import os
-
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
 
-def get_gemini_model() -> ChatGoogleGenerativeAI:
-    return ChatGoogleGenerativeAI(
-        model="gemini-3.6-flash",
+def get_groq_model() -> ChatGroq:
+    return ChatGroq(
+        model="openai/gpt-oss-120b",
         temperature=0,
     )

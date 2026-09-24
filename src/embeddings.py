@@ -1,6 +1,4 @@
 
-"""Jina embedding configuration for document and query vectors."""
-
 from src.jina_embeddings import JinaEmbeddings
 
 
