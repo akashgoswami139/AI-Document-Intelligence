@@ -40,33 +40,6 @@ class RawDocument(BaseModel):
 
 # ── AI document analysis ───────────────────────────────────────────
 
-class DetectedEntity(BaseModel):
-    name: str
-    entity_type: str  # e.g., "person", "organization", "date", "amount"
-
-
-class DetectedSection(BaseModel):
-    title: str
-    level: int = 1  # heading depth (1 = top-level)
-    page_number: int | None = None
-
-
-class DocumentAnalysis(BaseModel):
-    """LLM-inferred document understanding — the core differentiator."""
-    document_type: str = "Unknown"
-    main_topic: str = "Unknown"
-    purpose: str = "Unknown"
-    language: str = "English"
-    content_composition: ContentComposition = ContentComposition.TEXT
-    sections: list[DetectedSection] = Field(default_factory=list)
-    entities: list[DetectedEntity] = Field(default_factory=list)
-    summary: str = ""
-    key_dates: list[str] = Field(default_factory=list)
-    organizations: list[str] = Field(default_factory=list)
-    people: list[str] = Field(default_factory=list)
-    confidence: float = 0.0  # 0-1 confidence in the analysis
-
-
 # ── Document metadata (stored with each chunk) ────────────────────
 
 class DocumentMetadata(BaseModel):
@@ -76,7 +49,6 @@ class DocumentMetadata(BaseModel):
     file_type: str
     document_type: str = "Unknown"
     total_pages: int = 0
-    analysis: DocumentAnalysis | None = None
 
 
 # ── Chunks ─────────────────────────────────────────────────────────
@@ -140,39 +112,8 @@ class RetrievalResult(BaseModel):
     rank: int
 
 
-class SourceCitation(BaseModel):
-    """A formatted source reference for the user."""
-    file_name: str
-    page_number: int | None = None
-    section: str = "Unknown"
-    relevance_score: float = 0.0
-
-
 # ── RAG response ───────────────────────────────────────────────────
 
 class RAGResponse(BaseModel):
     """Complete response from the RAG pipeline."""
     answer: str
-    sources: list[SourceCitation] = Field(default_factory=list)
-    retrieved_chunks: list[RetrievalResult] = Field(default_factory=list)
-    query_analysis: QueryAnalysis | None = None
-
-
-# ── Evaluation ─────────────────────────────────────────────────────
-
-class EvaluationMetrics(BaseModel):
-    retrieval_relevance: float = 0.0   # 0-1
-    context_relevance: float = 0.0     # 0-1
-    answer_faithfulness: float = 0.0   # 0-1
-    answer_completeness: float = 0.0   # 0-1
-    citation_correctness: float = 0.0  # 0-1
-
-
-class EvaluationResult(BaseModel):
-    question: str
-    expected_answer: str = ""
-    generated_answer: str = ""
-    retrieved_context: str = ""
-    sources: list[SourceCitation] = Field(default_factory=list)
-    metrics: EvaluationMetrics = Field(default_factory=EvaluationMetrics)
-    explanation: str = ""

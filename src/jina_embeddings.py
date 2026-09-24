@@ -17,24 +17,28 @@ class JinaEmbeddings:
             raise ValueError("JINA_API_KEY not found in .env")
 
     def _embed(self, texts):
-        response = requests.post(
-            "https://api.jina.ai/v1/embeddings",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}",
-            },
-            json={
-                "model": self.model,
-                "input": texts,
-            },
-            timeout=60,
-        )
-
-        response.raise_for_status()
-
-        data = response.json()["data"]
-
-        return [item["embedding"] for item in data]
+        # Changelog: convert Jina transport and malformed-response failures into actionable runtime errors.
+        try:
+            response = requests.post(
+                "https://api.jina.ai/v1/embeddings",
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {self.api_key}",
+                },
+                json={
+                    "model": self.model,
+                    "input": texts,
+                },
+                timeout=60,
+            )
+            response.raise_for_status()
+            data = response.json().get("data", [])
+            embeddings = [item.get("embedding") for item in data if item.get("embedding")]
+            if len(embeddings) != len(texts):
+                raise ValueError("Jina returned an incomplete embedding response")
+            return embeddings
+        except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
+            raise RuntimeError(f"Jina embedding request failed: {exc}") from exc
 
     def embed_documents(self, texts):
         return self._embed(texts)

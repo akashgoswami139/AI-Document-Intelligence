@@ -34,6 +34,10 @@ class VectorStore:
         if not chunks:
             return 0
 
+        # Changelog: replace existing document chunks to make re-indexing idempotent.
+        for document_id in {chunk.document_id for chunk in chunks}:
+            self.store._collection.delete(where={"document_id": document_id})
+
         documents = [
             Document(
                 page_content=chunk.text,
@@ -42,7 +46,7 @@ class VectorStore:
             for chunk in chunks
         ]
 
-        self.store.add_documents(documents)
+        self.store.add_documents(documents, ids=[chunk.chunk_id for chunk in chunks])
         logger.info("Added %d chunks to vector store", len(documents))
         return len(documents)
 
@@ -71,7 +75,7 @@ class VectorStore:
                 return self.store.similarity_search_with_relevance_scores(query, k=k)
             return []
 
-    def delete_document(self, document_id: str) -> None:
+    def remove_document(self, document_id: str) -> None:
         """Remove all chunks belonging to a specific document."""
         try:
             collection = self.store._collection
@@ -79,6 +83,8 @@ class VectorStore:
             logger.info("Deleted chunks for document_id: %s", document_id)
         except Exception as e:
             logger.error("Failed to delete document %s: %s", document_id, e)
+
+    delete_document = remove_document
 
     def get_all_metadata(self) -> list[dict[str, Any]]:
         """Retrieve metadata for all stored chunks (for UI display)."""

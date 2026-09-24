@@ -8,7 +8,6 @@ from src.models import (
     DocumentMetadata,
     RAGResponse,
     RetrievalResult,
-    SourceCitation,
 )
 from src.prompts import RAG_SYSTEM_PROMPT
 from src.retriever import Retriever
@@ -53,18 +52,10 @@ class RAGChain:
             "question": question,
         })
 
-        # Step 5: Extract source citations
-        sources = self._extract_sources(results)
-
-        # Step 6: Update conversation memory
+        # Step 5: Update conversation memory
         self._update_history(question, answer)
 
-        return RAGResponse(
-            answer=answer,
-            sources=sources,
-            retrieved_chunks=results,
-            query_analysis=query_analysis,
-        )
+        return RAGResponse(answer=answer)
 
     def _format_context(self, results: list[RetrievalResult]) -> str:
         """Format retrieved chunks into a context string for the LLM."""
@@ -104,24 +95,6 @@ class RAGChain:
         # Trim to max history
         if len(self.chat_history) > self.max_history:
             self.chat_history = self.chat_history[-self.max_history:]
-
-    def _extract_sources(self, results: list[RetrievalResult]) -> list[SourceCitation]:
-        """Deduplicate and format source citations."""
-        seen = set()
-        sources = []
-
-        for r in results:
-            key = (r.chunk.file_name, r.chunk.page_number, r.chunk.section)
-            if key not in seen:
-                seen.add(key)
-                sources.append(SourceCitation(
-                    file_name=r.chunk.file_name,
-                    page_number=r.chunk.page_number,
-                    section=r.chunk.section,
-                    relevance_score=r.score,
-                ))
-
-        return sources
 
     def clear_history(self) -> None:
         """Reset conversation memory."""

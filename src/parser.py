@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import re
 
-from src.models import DocumentAnalysis, ParsedSection, RawDocument
+from src.models import ParsedSection, RawDocument
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +21,7 @@ HEADING_PATTERNS = [
 class DocumentParser:
     """Parses raw documents into structured sections."""
 
-    def parse(
-        self, raw_doc: RawDocument, analysis: DocumentAnalysis | None = None
-    ) -> list[ParsedSection]:
+    def parse(self, raw_doc: RawDocument) -> list[ParsedSection]:
         """Parse a raw document into structured sections."""
         all_sections: list[ParsedSection] = []
 
@@ -43,10 +41,6 @@ class DocumentParser:
                     ))
 
             all_sections.extend(page_sections)
-
-        # If analysis detected sections, try to align with parsed sections
-        if analysis and analysis.sections:
-            all_sections = self._enrich_with_analysis(all_sections, analysis)
 
         # Fallback: if no sections detected, wrap entire text as one section
         if not all_sections:
@@ -142,20 +136,3 @@ class DocumentParser:
 
         return "\n".join(lines)
 
-    def _enrich_with_analysis(
-        self, sections: list[ParsedSection], analysis: DocumentAnalysis
-    ) -> list[ParsedSection]:
-        """Use LLM analysis to improve section titles when detection was weak."""
-        analysis_titles = {s.title.lower() for s in analysis.sections}
-
-        for section in sections:
-            # If a section is titled generically ("Content"), check if analysis
-            # has a better title that matches the content
-            if section.title in ("Content", "Introduction", "Untitled"):
-                content_lower = section.content[:200].lower()
-                for a_title in analysis_titles:
-                    if a_title in content_lower:
-                        section.title = a_title.title()
-                        break
-
-        return sections

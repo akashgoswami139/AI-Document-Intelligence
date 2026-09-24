@@ -39,15 +39,21 @@ class QueryAnalyzer:
                 content = content.strip()
 
             data = json.loads(content)
+            # Changelog: normalize malformed LLM lists and fall back to general query analysis.
+            if not isinstance(data, dict):
+                raise ValueError("Query analysis response must be a JSON object")
+
+            def string_list(value: object) -> list[str]:
+                return [str(item) for item in value if item is not None] if isinstance(value, list) else []
 
             return QueryAnalysis(
                 original_query=query,
                 intent=data.get("intent", "general"),
-                target_document_types=data.get("target_document_types", []),
-                target_sections=data.get("target_sections", []),
-                is_multi_document=data.get("is_multi_document", False),
-                is_comparison=data.get("is_comparison", False),
-                keywords=data.get("keywords", []),
+                target_document_types=string_list(data.get("target_document_types", [])),
+                target_sections=string_list(data.get("target_sections", [])),
+                is_multi_document=bool(data.get("is_multi_document", False)),
+                is_comparison=bool(data.get("is_comparison", False)),
+                keywords=string_list(data.get("keywords", [])),
             )
 
         except Exception as e:
@@ -66,8 +72,7 @@ class QueryAnalyzer:
         lines = []
         for doc in documents:
             doc_type = doc.document_type
-            topic = doc.analysis.main_topic if doc.analysis else "Unknown"
             lines.append(
-                f"- {doc.file_name} (Type: {doc_type}, Topic: {topic})"
+                f"- {doc.file_name} (Type: {doc_type})"
             )
         return "\n".join(lines)

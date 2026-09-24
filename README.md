@@ -160,7 +160,7 @@ streamlit run app.py
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `GEMINI_API_KEY` | *required* | Google Gemini API key |
-| `GEMINI_MODEL` | `gemini-3.6-flash` | Gemini model for analysis and Q&A |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model for analysis and Q&A |
 | `JINA_API_KEY` | *required* | Jina API key for embeddings |
 | `JINA_EMBEDDING_MODEL` | `jina-embeddings-v5-text-small` | Jina embedding model |
 | `CHUNK_SIZE` | `1000` | Maximum chunk size in characters |
