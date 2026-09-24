@@ -333,7 +333,7 @@ with st.container():
     st.markdown("## Ask Your Documents")
 
     if not st.session_state.documents:
-        st.info(" Please upload documents start chat")
+        st.info(" Please upload documents to start chat")
     else:
         # Display chat history
         for msg in st.session_state.chat_history:
